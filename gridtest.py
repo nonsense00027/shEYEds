@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import random
 import functions as fu
-
+import gaze_plot as ga
 
 # drawRectangle(200,500)
 cap = cv2.VideoCapture("sample.mp4")
@@ -55,8 +55,13 @@ while True:
         # print(fu.aoi)
         # print(fu.alpha)
         # print(fu.gridPlot)
-        fu.plotGrid()
+        # fu.plotGrid()
         # fu.plotGridBar()
+        # print(fu.heatmap_array)
+        # fu.heatmap_list = list(map(lambda q: (int(q[0]), int(q[1]), 1), fu.heatmap_array))
+        # print(fu.heatmap_list)
+        # ga.displayHeatmap(fu.heatmap_array)
+        ga.displayHeatmap(fu.heatmap_array, 1280, 720, 0.6, 'sampleheatmap', 'sample.png', 200, 33)
         break
 
 # print(fu.aoi)

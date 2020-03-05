@@ -43,28 +43,58 @@ import math
 #         aoi[8]+=1
 #         gridPlot.append(9)
 
+def forHeatmap(x, y):
+    heatmapGrid = []
+    heatmapGrid.append(math.floor(x))
+    heatmapGrid.append(math.floor(y))
+    heatmap_array.append(heatmapGrid)
+
 def drawRectangle(scene, grid):
     aoi[grid-1]+=1
     gridPlot.append(grid)
-
+    xgrid_offset = xMaximumGrid[0]/2
+    ygrid_offset = yMaximumGrid[0]/2
+    x = 0
+    y = 0
     if grid==1:
-        cv2.rectangle(scene, (0, 0), ((math.floor(xMaximumGrid[0])), (math.floor(yMaximumGrid[0]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[0])
+        y = math.floor(yMaximumGrid[0])
+        cv2.rectangle(scene, (0, 0), (x, y), (255, 0, 0), 1)
+        # print(x-xgrid_offset,y-ygrid_offset)
     elif grid==2:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), 0), ((math.floor(xMaximumGrid[1])), (math.floor(yMaximumGrid[0]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[1])
+        y = math.floor(yMaximumGrid[0])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), 0), (x, y), (255, 0, 0), 1)
     elif grid==3:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), 0), ((math.floor(xMaximumGrid[2])), (math.floor(yMaximumGrid[0]))), (255, 0, 0), )
+        x = math.floor(xMaximumGrid[2])
+        y = math.floor(yMaximumGrid[0])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), 0), (x, y), (255, 0, 0), )
     elif grid==4:
-        cv2.rectangle(scene, (0, math.floor(yMaximumGrid[0])), ((math.floor(xMaximumGrid[0])), (math.floor(yMaximumGrid[1]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[0])
+        y = math.floor(yMaximumGrid[1])
+        cv2.rectangle(scene, (0, math.floor(yMaximumGrid[0])), (x, y), (255, 0, 0), 1)
     elif grid==5:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), math.floor(yMaximumGrid[0])), ((math.floor(xMaximumGrid[1])), (math.floor(yMaximumGrid[1]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[1])
+        y = math.floor(yMaximumGrid[1])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), math.floor(yMaximumGrid[0])), (x, y), (255, 0, 0), 1)
     elif grid==6:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), math.floor(yMaximumGrid[0])), ((math.floor(xMaximumGrid[2])), (math.floor(yMaximumGrid[1]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[2])
+        y = math.floor(yMaximumGrid[1])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), math.floor(yMaximumGrid[0])), (x, y), (255, 0, 0), 1)
     elif grid==7:
-        cv2.rectangle(scene, (0, math.floor(yMaximumGrid[1])), ((math.floor(xMaximumGrid[0])), (math.floor(yMaximumGrid[2]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[0])
+        y = math.floor(yMaximumGrid[2])
+        cv2.rectangle(scene, (0, math.floor(yMaximumGrid[1])), (x, y), (255, 0, 0), 1)
     elif grid==8:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), math.floor(yMaximumGrid[1])), ((math.floor(xMaximumGrid[1])), (math.floor(yMaximumGrid[2]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[1])
+        y = math.floor(yMaximumGrid[2])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[0]), math.floor(yMaximumGrid[1])), (x, y), (255, 0, 0), 1)
     elif grid==9:
-        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), math.floor(yMaximumGrid[1])), ((math.floor(xMaximumGrid[2])), (math.floor(yMaximumGrid[2]))), (255, 0, 0), 1)
+        x = math.floor(xMaximumGrid[2])
+        y = math.floor(yMaximumGrid[2])
+        cv2.rectangle(scene, (math.floor(xMaximumGrid[1]), math.floor(yMaximumGrid[1])), (x, y), (255, 0, 0), 1)
+    
+    forHeatmap(x-xgrid_offset,y-ygrid_offset)
 
 
 def drawOverlay(scene):
@@ -138,7 +168,7 @@ def drawChecker(scene, x1, y1, x2, y2):
     drawRectangle(scene, grid)
     updateGrid(grid)
 
-
+# CALIBRATE GAZE ON GRID SIZE DEPENDING ON INPUT VIDEO SIZE
 def calibrate(point1,point2,point3,point4,point5,point6,point7,point8,point9):
     xMaximum[0] = (point1[0]+point2[0])/2
     xMaximum[1] = (point2[0]+point3[0])/2
@@ -152,6 +182,7 @@ def calibrate(point1,point2,point3,point4,point5,point6,point7,point8,point9):
 
     yMinimum = point1[1] - (yMaximum[1]- point4[1])
 
+# CALIBRATE GRID SIZE DEPENDING ON INPUT VIDEO SIZE
 def calibrateGrid(width, height):
     # x-axis
     gridOffset = width/3
@@ -186,7 +217,7 @@ def plotGrid():
 
     plt.figure(2)
     index = np.arange(len(gridLabel))
-    import seaborn as sns
+    # import seaborn as sns
     plt.bar(index, aoi)
     plt.xlabel('Grids', fontsize=5)
     plt.ylabel('Number of Gaze', fontsize=5)
@@ -226,3 +257,5 @@ xMaximumGrid = []
 yMaximumGrid = []
 
 gridPlot = []
+heatmap_array = []
+heatmap_list = []
